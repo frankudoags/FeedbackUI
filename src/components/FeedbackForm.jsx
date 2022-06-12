@@ -3,7 +3,7 @@ import Button from './shared/Button'
 import RatingSelect from './RatingSelect'
 import {useState, useContext, useEffect} from 'react'
 import FeedbackContext from '../context/FeedbackContext'
-// A form that takes in a function as a prop to handle a new feedback addition
+
 function FeedbackForm() {
     // Component level states.
     const [text, setText] = useState('');
@@ -11,8 +11,12 @@ function FeedbackForm() {
     const [btnDisabled, setbtnDisabled] = useState(true);
     const [message, setMessage] = useState('');
 
+    //Bring in addfeedback function, feedbackEdit variable, and UpdateFeedback function from feedback context
+    //using useContext() hook
     const {addFeedback, feedbackEdit, updateFeedback} = useContext(FeedbackContext);
 
+    //Using useEffect hook to monitor feedbackEdit changes and update UI accordingly
+    //If feedbackEdit edit state is true, then we are editing a feedback, so we need to set the text and rating to the feedbackEdit values
     useEffect(() => {
         if(feedbackEdit.edit === true) {
             setbtnDisabled(false);
@@ -44,6 +48,8 @@ function FeedbackForm() {
 
     // Handles form submission when button state is enabled, checks again that length of text is longer than 10 char,
     // creates a new object with the text and rating and passes it to the handleAdd prop that was passed in.
+    //If edit state is true, it edits and updates the feedback item.
+    //If edit state is false, it adds a new feedback item.
     const handleSubmit = (e) => {
         e.preventDefault();
         if(text.trim().length > 10) {
@@ -76,11 +82,8 @@ function FeedbackForm() {
                  placeholder='Leave a review' 
                  value={text}/>
 
-            <Button type="submit"
-            isDisabled = {btnDisabled}
-            >
-                SEND
-            </Button>
+            {/* Submit Button */}
+            <Button type="submit" isDisabled = {btnDisabled}>SEND</Button>
             </div>
             {message && <div className="message transition">{message}</div>}
         </form>
